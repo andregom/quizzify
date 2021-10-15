@@ -2,7 +2,7 @@
   "name": "quizzify",
   "version": "0.1.0",
   "private": true,
-  "main": "public/main.cjs",
+  "main": "electron/main.cjs",
   "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -12,6 +12,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "electron-is-dev": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
@@ -23,10 +24,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "wait-on tcp:3000 && electron .",
+    "electron": "electron --unhandled-rejections=strict .",
+    "dev-electron": "wait-on tcp:3000 && electron .",
     "launch": "npm-run-all --parallel --aggregate-output -r \"start\" \"electron\"",
     "watch": "webpack --config webpack.common.js --watch",
-    "dev-launch": "npm-run-all --parallel -r \"start\" \"watch\" \"electron\""
+    "dev-launch": "npm-run-all --parallel --aggregate-output -r \"start\" \"dev-electron\""
   },
   "eslintConfig": {
     "extends": [

@@ -1,7 +1,24 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
+const { app, dialog, BrowserWindow } = require('electron');
+const childProcess = require('child_process');
+const isDev = require('electron-is-dev');
+const path = require('path');
+const url = require('url');
 
 ///require('electron-reload')(__dirname);
+
+const p = childProcess.fork(path.join(__dirname, 'NodeBcknd.js'), ['hello'], {
+  silent: true,
+  detached: true,
+  stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+  env: {
+      ELECTRON_RUN_AS_NODE:1
+  }
+});
+
+p.send('hello');
+p.on('message', (m) => {
+	console.log('Got message:', m);
+});
 
 function createWindow () {
   // Create the browser window.
@@ -12,9 +29,28 @@ function createWindow () {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, './public/preload.js')
+      //preload: path.join(__dirname, './public/preload.js')
     }
-  })
+  });
+
+  const startPoint = {};
+
+  if (isDev) {
+    //startPoint.path = "http://localhost:3000";
+    options = {
+      title: 'Hey, You Are Running In Dev Mode!',
+      message: 'The current application is running in Dev Mode',
+      detail: 'Happy coding!',
+      checkboxLabel: 'Do not show me this again',
+      checkboxChecked: true,
+    };
+    dialog.showMessageBox(null, options, (response, checkboxChecked) => {
+      console.log(response);
+      console.log(checkboxChecked);
+    });
+  } /* else {
+    startPoint.path = `file://${__dirname}/../index.html`;
+  } */
 
   //load the index.html from a url
   win.loadURL('http://localhost:3000');
