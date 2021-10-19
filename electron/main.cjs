@@ -1,4 +1,5 @@
-const { app, dialog, BrowserWindow } = require('electron');
+const { app, dialog, BrowserWindow,  ipcMain } = require('electron');
+const { channels } = require('../src/shared/constants');
 const childProcess = require('child_process');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -29,7 +30,7 @@ function createWindow () {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      //preload: path.join(__dirname, './public/preload.js')
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -82,3 +83,10 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on(channels.APP_INFO, (event) => {
+  event.sender.send(channels.APP_INFO, {
+    appName: app.getName(),
+    appVersion: app.getVersion(),
+  });
+});

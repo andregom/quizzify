@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "main": "electron/main.cjs",
-  "type": "module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -30,6 +29,8 @@
     "watch": "webpack --config webpack.common.js --watch",
     "dev-launch": "npm-run-all --parallel --aggregate-output -r \"start\" \"dev-electron\""
   },
+  "author": "André Gomes",
+  "license": "UFCG",
   "eslintConfig": {
     "extends": [
       "react-app",
